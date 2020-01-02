@@ -6,26 +6,17 @@
     <description>Recent content in Tags on 渺小尘埃</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 18 Nov 2019 10:51:39 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jan 2020 14:22:19 +0800</lastBuildDate>
     
 	<atom:link href="https://gy0624ww.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>tag1</title>
-      <link>https://gy0624ww.github.io/tags/tag1/</link>
-      <pubDate>Mon, 18 Nov 2019 10:51:39 +0800</pubDate>
+      <title>Go</title>
+      <link>https://gy0624ww.github.io/tags/go/</link>
+      <pubDate>Thu, 02 Jan 2020 14:22:19 +0800</pubDate>
       
-      <guid>https://gy0624ww.github.io/tags/tag1/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>tag2</title>
-      <link>https://gy0624ww.github.io/tags/tag2/</link>
-      <pubDate>Mon, 18 Nov 2019 10:51:39 +0800</pubDate>
-      
-      <guid>https://gy0624ww.github.io/tags/tag2/</guid>
+      <guid>https://gy0624ww.github.io/tags/go/</guid>
       <description></description>
     </item>
     
