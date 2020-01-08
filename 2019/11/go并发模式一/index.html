@@ -446,7 +446,7 @@ for integer := range intSteam {
 
 <p>结果输出并程序退出：</p>
 
-<pre><code class="language-go">1 2 3 4 5
+<pre><code>1 2 3 4 5
 </code></pre>
 
 <p>上面的例子里我们确保我我们执行完goroutine之后关闭了<code>intStream</code>, 并且提供了循环的终止条件，这是非常常见的模式</p>
@@ -518,7 +518,7 @@ wg.Wait()</code></pre>
 
 <p>输出：</p>
 
-<pre><code class="language-golang">Unblocking goroutines...
+<pre><code>Unblocking goroutines...
 4 has begun
 2 has begun
 3 has begun
@@ -683,7 +683,7 @@ fmt.Println(&#34;Done receiving!&#34;)</code></pre>
 
 <p>结果是：</p>
 
-<pre><code class="language-golang">Received: 0
+<pre><code>Received: 0
 Received: 1
 Received: 2
 Received: 3
@@ -826,7 +826,7 @@ select {
 
 <p>结果输出：</p>
 
-<pre><code class="language-go">Blocking on read...
+<pre><code>Blocking on read...
 Unblocked 5.000170042s later
 </code></pre>
 
@@ -900,7 +900,7 @@ fmt.Printf(&#34;c1Count: %d\nc2Count: %d\n&#34;, c1Count, c2Count)</code></pre>
 
 <p>结果：</p>
 
-<pre><code class="language-go">c1Count: 505
+<pre><code>c1Count: 505
 c2Count: 496
 </code></pre>
 
@@ -1020,7 +1020,7 @@ select{
 
 <p>结果：</p>
 
-<pre><code class="language-go">In default after 1.421μs
+<pre><code>In default after 1.421μs
 </code></pre>
 
 <p>可见几乎是瞬间就走到了<code>default</code>语句。这样我们就和<code>for-select</code>相互组合，来实现一个<code>goroutine</code>等待另一个<code>goroutine</code>的结果的同时继续处理其他事情：</p>
@@ -1091,7 +1091,7 @@ fmt.Printf(&#34;Achieved %v cycles of work before signalled to stop.\n&#34;, wor
 
 <p>结果：</p>
 
-<pre><code class="language-go">Achieved 5 cycles of work before signalled to stop.
+<pre><code>Achieved 5 cycles of work before signalled to stop.
 </code></pre>
 
 <p>最后, <code>select{}</code> 这个没有任何条件的语句会永远进行阻塞。</p>
