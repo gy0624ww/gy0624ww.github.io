@@ -7,7 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.7-BETA">
 <meta name="author" content="渺小的尘埃">
-<meta name="keywords" content="Go, 并发模式, 后端, development, golang, php, lnmp, 日记, 技术博客, 博客, python">
+<meta name="keywords" content="Go, 并发模式, 后端, development, Go, golang, php, lnmp, 日记, 技术博客, 博客, python, 技术分享, 笔记">
 <meta name="description" content="">
 
 
@@ -17,7 +17,7 @@
 <meta name="twitter:title" content="Go并发模式（一）">
 <meta property="og:url" content="https://gy0624ww.github.io/2019/11/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%80/">
 <meta property="twitter:url" content="https://gy0624ww.github.io/2019/11/go%E5%B9%B6%E5%8F%91%E6%A8%A1%E5%BC%8F%E4%B8%80/">
-<meta property="og:site_name" content="渺小尘埃">
+<meta property="og:site_name" content="渺小的尘埃">
 <meta property="og:description" content="">
 <meta name="twitter:description" content="">
 <meta property="og:locale" content="en-us">
@@ -110,7 +110,7 @@ if (!doNotTrack) {
       <header id="header" data-behavior="5">
   <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
   <div class="header-title">
-    <a class="header-title-link" href="https://gy0624ww.github.io/">渺小尘埃</a>
+    <a class="header-title-link" href="https://gy0624ww.github.io/">渺小的尘埃</a>
   </div>
   
     
@@ -309,7 +309,7 @@ if (!doNotTrack) {
               <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
 <ul>
 <li><a href="#前言">前言</a></li>
-<li><a href="#close-channel">close-channel</a></li>
+<li><a href="#close-channel">Close-Channel</a></li>
 <li><a href="#channel约束">channel约束</a></li>
 <li><a href="#select">Select</a></li>
 <li><a href="#本文参考">本文参考</a></li>
@@ -330,7 +330,7 @@ if (!doNotTrack) {
 
 <p>下面我们来进入正题啦, 下面我会把一些常见的模式归纳出来，有的会比较基础且常见，有的会彼此组合来使得扩展代码更加强壮。</p>
 
-<h1 id="close-channel">close-channel</h1>
+<h1 id="close-channel">Close-Channel</h1>
 
 <p>我们知道当channel被关闭的时候，我们可以从中读取到:</p>
 
