@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.7-BETA">
+<meta name="author" content="渺小的尘埃">
+<meta name="keywords" content="Final Cut Pro, 剪辑, development, Go, golang, php, lnmp, 日记, 技术博客, 博客, python, 技术分享, 笔记">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Final Cut Pro 剪辑入门">
+<meta name="twitter:title" content="Final Cut Pro 剪辑入门">
+<meta property="og:url" content="https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+<meta property="twitter:url" content="https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+<meta property="og:site_name" content="渺小的尘埃">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2020-01-28T10:50:19">
+  
+  
+    <meta property="article:modified_time" content="2020-01-28T10:50:19">
+  
+  
+  
+    
+      <meta property="article:section" content="剪辑">
+    
+  
+  
+    
+      <meta property="article:tag" content="Final Cut Pro">
+    
+      <meta property="article:tag" content="剪辑">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://s2.ax1x.com/2020/01/28/1MQSeS.md.png">
+  <meta property="twitter:image" content="https://s2.ax1x.com/2020/01/28/1MQSeS.md.png">
+
+
+  <meta property="og:image" content="https://s2.ax1x.com/2020/01/28/1MQSeS.md.png">
+  <meta property="twitter:image" content="https://s2.ax1x.com/2020/01/28/1MQSeS.md.png">
+
+
+
+
+  <meta property="og:image" content="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg">
+  <meta property="twitter:image" content="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg">
+
+
+    <title>Final Cut Pro 剪辑入门</title>
+
+    <link rel="icon" href="https://gy0624ww.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://gy0624ww.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-155223492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://gy0624ww.github.io/">渺小的尘埃</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://gy0624ww.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://gy0624ww.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">渺小的尘埃</h4>
+        
+          <h5 class="sidebar-profile-bio">不完全栈工程师</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user-circle-o"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/page/friendlink">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-handshake-o"></i>
+      
+      <span class="sidebar-button-desc">friendLink</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link open-algolia-search" href="https://gy0624ww.github.io/#search">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+      
+      <span class="sidebar-button-desc">Search</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/gy0624ww" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              post-header-cover--partial"
+       style="background-image:url('https://s2.ax1x.com/2020/01/28/1MQSeS.md.png')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      Final Cut Pro 剪辑入门
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2020-01-28T10:50:19&#43;08:00">
+        
+  January 28, 2020
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://gy0624ww.github.io/categories/%e5%89%aa%e8%be%91">剪辑</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">大家都说来日方长，可这世间却世事难料</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#软件介绍">软件介绍</a></li>
+<li><a href="#界面">界面</a>
+<ul>
+<li><a href="#浏览器">浏览器</a></li>
+<li><a href="#检查器">检查器</a></li>
+<li><a href="#时间线">时间线</a></li>
+<li><a href="#检视器">检视器</a></li>
+</ul></li>
+<li><a href="#导入素材">导入素材</a>
+<ul>
+<li><a href="#资源库">资源库</a></li>
+<li><a href="#其他导入方式快捷键">其他导入方式快捷键</a></li>
+</ul></li>
+<li><a href="#渲染">渲染</a></li>
+<li><a href="#剪辑工具">剪辑工具</a>
+<ul>
+<li><a href="#如何添加转场">如何添加转场</a></li>
+<li><a href="#如何添加效果">如何添加效果</a></li>
+<li><a href="#音乐淡入淡出">音乐淡入淡出</a></li>
+<li><a href="#如何添加字幕">如何添加字幕</a></li>
+</ul></li>
+<li><a href="#保存工作区">保存工作区</a></li>
+<li><a href="#导出">导出</a></li>
+</ul>
+</nav>
+
+<h1 id="软件介绍">软件介绍</h1>
+
+<p>剪辑出一部好的片子缺少不了好用的工具，市面上电脑端常用有Adobe公司出品的<code>Premiere</code>（简称Pr），另外就是苹果公司出品的<code>Final Cut Pro</code>（简称FCP）了，其实这两款软件都很不错，也各有优缺点，我的电脑是Macbook,对<code>FCP</code>契合度更高一些，本文就重点介绍<code>FCP</code>为主,使用的是<code>Final Cut Pro 10.4.3</code>版本.</p>
+
+<p>在移动市场覆盖面很广的背景下，一些移动端的剪辑软件也展露出随拍随剪的优势来，比如头条出品的<code>剪映</code>,和360出品的<code>快剪辑</code>等等。但是我觉得术业有专攻，简单的片子手机还可以驾驭的了，但是如果真的要做出一个做工精良的片子还是得在PC端上来解决，毕竟有强大的硬件支撑，而且随着拍摄工具的多样化:手机，微单，运动相机，无人机等等,从越来越多的地方拷出资源，显然在电脑里管理还是很方便的。</p>
+
+<p>好了，咱言归正传</p>
+
+<h1 id="界面">界面</h1>
+
+<p><code>FCP</code>的操作界面分为四个部分，分别是：<code>浏览器</code>，<code>检视器</code>，<code>检查器</code>和<code>时间线</code><br />
+大家现有个大体的概念，<br />
+浏览器顾名思义就是浏览各种素材的地方<br />
+检视器就是预览的地方<br />
+检查器就是调整各种参数的地方<br />
+时间线就是排列组合各种素材和音频的地方</p>
+
+<p>下面我们来详细看看各部分</p>
+
+<h2 id="浏览器">浏览器</h2>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/29/1MhuHP.png" title="浏览器" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/29/1MhuHP.png"  alt="浏览器">
+  
+    </a>
+  
+   
+    <span class="caption">浏览器</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>浏览器里包括<code>资源库</code>，<code>音频</code>和<code>字幕</code>相关的素材</p>
+
+<h2 id="检查器">检查器</h2>
+
+<p>这里可以查看一些视频的信息，比如视频的尺寸和分辨率，时长，编码器等等，也可以修改视频的一些参数，比如不透明度，缩放，旋转，曝光，调色等等。</p>
+
+<h2 id="时间线">时间线</h2>
+
+<p>这里就是时间线区域：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/30/11wT10.png" title="时间线" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/30/11wT10.png"  alt="时间线">
+  
+    </a>
+  
+   
+    <span class="caption">时间线</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>这里就是组合各个素材的地方。想要什么就往里拖就可以了。</p>
+
+<h2 id="检视器">检视器</h2>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/30/11whkj.png" title="检视器" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/30/11whkj.png"  alt="检视器">
+  
+    </a>
+  
+   
+    <span class="caption">检视器</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>在下面的时间线中按<code>空格键</code>开始播放,除了预览和播放，他还有别的功能：</p>
+
+<ul>
+<li>缩放，裁剪素材</li>
+<li>调整播放速度<br /></li>
+<li>调整颜色等等</li>
+</ul>
+
+<h1 id="导入素材">导入素材</h1>
+
+<h2 id="资源库">资源库</h2>
+
+<p>上面说到浏览器是浏览各种素材的地方，当然我们最关心的就是管理本地拍摄的素材,资源库的层级结构依此为<code>资源库</code>-&gt;<code>事件</code>-&gt;<code>项目</code><br />
+资源库相当于一个总文件夹,可以包含多个事件，当新建一个资源库的时候，系统会默认给你创建一个以日期命名的事件。所以事件可以理解为资源库的二级文件夹，而项目依托于事件，必须在一个事件下建立项目。</p>
+
+<p>新建项目的时候选择对应的参数，需要注意的是，帧率最高支持60，如果选择了60，那么对将来导入的所有素材的要求就是必须都得大于等于60，所以一般来说选30就够用了。渲染编码就选择<code>Apple ProRes422</code>。</p>
+
+<p>建好项目之后，下方就会出现了一个空白的时间线，换句话说新建项目就是新建一条时间线，只要有时间线我们才能往里面添加素材。</p>
+
+<p>终于到了导入素材的时候了，大概有两种方法，首先是比较标准的做法：
+选中一个事件，在空白处右键选择<code>新建媒体</code>，选择你要导入的视频素材，这里要注意的是右侧的文件拷贝选项：</p>
+
+<ul>
+<li>拷贝到资源库</li>
+<li>让文件保留原位<br /></li>
+</ul>
+
+<p>前者进行了一次复制，不是在源文件上修改，好处就是容错率高，缺点就是占用额外的空间，后者就是在源文件上进行修改:</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/29/1QjrUe.png" title="文件拷贝选项" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/29/1QjrUe.png"  alt="文件拷贝选项">
+  
+    </a>
+  
+   
+    <span class="caption">文件拷贝选项</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>还有一个选项就是转码的选择，如果要剪辑4K这种高分辨率的视频，但是电脑性能又跟不上，可以选择勾上<code>创建优化媒体</code>或<code>创建代理媒体</code>，这样能提高剪辑流畅性</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/30/1Qz9j1.png" title="转码" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/30/1Qz9j1.png"  alt="转码">
+  
+    </a>
+  
+   
+    <span class="caption">转码</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>另外一种就是直接从<code>访达</code>里拖，简单粗暴。</p>
+
+<div class="alert info ">
+  <p>但是如果素材时间很长，那么把整个素材都拖进时间线太不方便了，比如有个30分钟的素材，我只要其中的2分钟，显然我把30分钟的素材都拖到时间线上不妥，那么我们最好只拖我们想要的部分，用快捷键在开始的地方按下<code>i</code>和结束的地方按下<code>o</code></p>
+</div>
+
+<blockquote>
+<p>i: Initiate 开始<br />
+o: Over 结束</p>
+</blockquote>
+
+<p>选取后会有黄色的区域，直接拖该区域到时间线就OK了</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/30/11BOY9.png" title="选取区域" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/30/11BOY9.md.png"  alt="选取区域">
+  
+    </a>
+  
+   
+    <span class="caption">选取区域</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h2 id="其他导入方式快捷键">其他导入方式快捷键</h2>
+
+<ul>
+<li><code>E</code>: 把所选素材直接追加在时间线末尾，不覆盖其他片段<br /></li>
+<li><code>Q</code>: 把所选素材放到当前时间轴的位置，不覆盖其他片段<br /></li>
+<li><code>W</code>: 把所选素材放到当前时间轴的位置，时间轴所在的素材会自动切割出来在两边<br /></li>
+<li><code>D</code>: 把所选素材放到当前时间轴的位置，时间轴所在的素材会自动切割开来，并被覆盖<br /></li>
+</ul>
+
+<p>如果你记不住这几个快捷键，那么界面也有对应的按钮，就是下面这四个：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/11sgoD.png" title="快捷键" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/11sgoD.md.png"  alt="快捷键">
+  
+    </a>
+  
+   
+    <span class="caption">快捷键</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>那么如果我只想把素材的音频添加到时间线上怎么办呢，上面的四个按钮旁边有个下拉菜单，选择仅音频就OK了。当然也可以仅视频和全部。</p>
+
+<h1 id="渲染">渲染</h1>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/11yhAU.png" title="渲染进度" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/11yhAU.md.png"  alt="渲染进度">
+  
+    </a>
+  
+   
+    <span class="caption">渲染进度</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>看到这些小点了吗，每当时间线有更新软件就会在后台进行渲染，这些白点代表后台渲染的进度，当这些点没有了，就代表渲染结束了，时间线预览视频的时候会流畅很多，但是如果你的电脑配置不是很高，因为渲染同时占用系统资源，就有可能出现卡顿，影响剪辑的流畅性，那么你可以在<code>偏好设置</code>-&gt;<code>播放</code>里调整渲染延迟时间，或者直接关闭后台渲染。</p>
+
+<h1 id="剪辑工具">剪辑工具</h1>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/13ENYn.png" title="剪辑工具" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/13ENYn.md.png"  alt="剪辑工具">
+  
+    </a>
+  
+   
+    <span class="caption">剪辑工具</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>这里使用频率最高的就是选择<code>A</code> 和切割<code>B</code>，切割可以在按时间线切割视频片段，选择片段可以移动片段位置。</p>
+
+<ul>
+<li>修剪（T） 可以左右拖动素材，当一头边界是红色的就说明拖到头了<br /></li>
+<li>位置（P） 可以拖动素材片段，如果素材直接有中间空白则自动添加黑场</li>
+<li>范围选择&reg; 可以在素材上选择一块范围，比如想调整某一段的音量就可以这么圈选</li>
+<li>缩放（Z） 可以缩放时间线，不常用，一般都直接用触控板来缩放，更方便</li>
+</ul>
+
+<div class="alert info ">
+  <p>如果要在界面上显示所有时间线的内容，用快捷键<code>shirt+Z</code>。就会自动缩放所有时间线到合适的大小以全部显示</p>
+</div>
+
+<h2 id="如何添加转场">如何添加转场</h2>
+
+<p>打开转场素材，查看目前系统已经安装的转场素材：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/13s4vn.png" title="转场" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/13s4vn.md.png"  alt="转场">
+  
+    </a>
+  
+   
+    <span class="caption">转场</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>然后把转场素材片段拖到两个视频片段之间就可以了。</p>
+
+<h2 id="如何添加效果">如何添加效果</h2>
+
+<p>打开效果素材列表：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/13ybLt.png" title="效果" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/13ybLt.md.png"  alt="效果">
+  
+    </a>
+  
+   
+    <span class="caption">效果</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>和转场操作类似，把对应的效果拖到要生效的视频片段上就行了。</p>
+
+<h2 id="音乐淡入淡出">音乐淡入淡出</h2>
+
+<p>音乐淡入淡出也是比较常用的操作。来控制音乐结束不那么突兀。</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/136TtU.png" title="声音淡入淡出" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/136TtU.md.png"  alt="声音淡入淡出">
+  
+    </a>
+  
+   
+    <span class="caption">声音淡入淡出</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>具体做法就是拖动音频部分的两个小按钮，当出现左右的剪头<code>&lt;- -&gt;</code>的时候 向左或右拖动，就会看到有个曲线生成，曲线越平声音越小。</p>
+
+<div class="alert info ">
+  <p>默认是视频和音频是在一起的，单独调整视频容易误操作，最好是音频和视频分离开，右键片段选择分离音频就可以把音频和视频分成两个并行的片段。</p>
+</div>
+
+<h2 id="如何添加字幕">如何添加字幕</h2>
+
+<p>打开浏览器里的字幕选项卡，选择字幕特效，然后拖到对应添加字幕的视频片段上，再在检查器区域配置字幕相关属性或者直接在监视器上填写字幕内容</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/132VFf.png" title="添加字幕" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/132VFf.md.png"  alt="添加字幕">
+  
+    </a>
+  
+   
+    <span class="caption">添加字幕</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h1 id="保存工作区">保存工作区</h1>
+
+<p>上面所提到的界面如果都展开的话有些人会觉得很杂乱，可以通过右上角的三个按钮来显示或隐藏部分内容来精简操作环境</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/13hvxU.png" title="保存工作区" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/13hvxU.md.png"  alt="保存工作区">
+  
+    </a>
+  
+   
+    <span class="caption">保存工作区</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>之后可以对比较常用的工作区组合进行保存，可以在<code>窗口</code>-&gt;<code>工作区</code>-&gt;<code>将工作区保存为</code>进行保存</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/1341it.png" title="保存工作区" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/1341it.md.png"  alt="保存工作区">
+  
+    </a>
+  
+   
+    <span class="caption">保存工作区</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>以后就可以在特定的流程中快速的进行切换，比如在到了调色环境，就可以切换到之前搭配好的调色界面窗口组合</p>
+
+<h1 id="导出">导出</h1>
+
+<p>右上角的分享按钮，选择<code>母版文件</code>。然后选择设置选项卡：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/13Tq3t.png" title="导出" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/13Tq3t.md.png"  alt="导出">
+  
+    </a>
+  
+   
+    <span class="caption">导出</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>然后在格式选择<code>电脑</code>，视频编码选择<code>H.264较好质量</code> 点击下一步，就会在后台进行渲染并导出了。</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/137sr8.png" title="导出" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/137sr8.md.png"  alt="导出">
+  
+    </a>
+  
+   
+    <span class="caption">导出</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>在左上角可以查看渲染进度</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://s2.ax1x.com/2020/01/31/137JbD.png" title="导出" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://s2.ax1x.com/2020/01/31/137JbD.md.png"  alt="导出">
+  
+    </a>
+  
+   
+    <span class="caption">导出</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>以上就是<code>Final Cut Pro X</code>的常用的入门操作。以后拍出好片的时候我再结合实际例子实操一下</p>
+
+<span class="highlight-text danger">
+敬请期待😃  
+</span>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/final-cut-pro/">Final Cut Pro</a>
+
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/%E5%89%AA%E8%BE%91/">剪辑</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2020/01/go%E8%AF%AD%E8%A8%80%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E6%98%AF%E4%BC%A0%E5%80%BC%E8%BF%98%E6%98%AF%E4%BC%A0%E5%BC%95%E7%94%A8/" data-tooltip="Go语言参数传递是传值还是传引用">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2020 渺小的尘埃. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2020/01/go%E8%AF%AD%E8%A8%80%E5%8F%82%E6%95%B0%E4%BC%A0%E9%80%92%E6%98%AF%E4%BC%A0%E5%80%BC%E8%BF%98%E6%98%AF%E4%BC%A0%E5%BC%95%E7%94%A8/" data-tooltip="Go语言参数传递是传值还是传引用">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgy0624ww.github.io%2F2020%2F01%2Ffinal-cut-pro-%25E5%2589%25AA%25E8%25BE%2591%25E5%2585%25A5%25E9%2597%25A8%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fgy0624ww.github.io%2F2020%2F01%2Ffinal-cut-pro-%25E5%2589%25AA%25E8%25BE%2591%25E5%2585%25A5%25E9%2597%25A8%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fgy0624ww.github.io%2F2020%2F01%2Ffinal-cut-pro-%25E5%2589%25AA%25E8%25BE%2591%25E5%2585%25A5%25E9%2597%25A8%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">渺小的尘埃</h4>
+    
+      <div id="about-card-bio">不完全栈工程师</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        soft enginer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Beijing-China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://gy0624ww.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://gy0624ww.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/go.min.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/gy0624ww.github.io\/2020\/01\/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8\/';
+          
+            this.page.identifier = 'Final Cut Pro 剪辑入门';
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tellutop';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+
