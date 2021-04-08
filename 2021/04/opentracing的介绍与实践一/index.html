@@ -451,11 +451,11 @@ if (!doNotTrack) {
 
 <p>图中：
 1. 在Trace A中，B和E是A的子Span<br />
-2. 在Trace A中，B和E是A的子Span
-3. 在Trace A中，B和E顺序执行，E的执行需要等待B的完成
-4. A的消耗时长为B和E的总合（这里都是理想情况）
-5. 在Span B中，C和D是B的子Span
-6. 在Span B中，C和D顺序执行，D的执行需要等待C的完成
+2. 在Trace A中，B和E是A的子Span<br />
+3. 在Trace A中，B和E顺序执行，E的执行需要等待B的完成<br />
+4. A的消耗时长为B和E的总合（这里都是理想情况）<br />
+5. 在Span B中，C和D是B的子Span<br />
+6. 在Span B中，C和D顺序执行，D的执行需要等待C的完成<br />
 7. B的消耗时长为C和D的总合（这里都是理想情况）</p>
 
 <p>根据OpenTracing的规范，一个span封装了以下信息：</p>
