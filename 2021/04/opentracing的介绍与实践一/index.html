@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渺小的尘埃">
+<meta name="keywords" content="opentracing, 链路追踪, 微服务, development, Go, golang, php, lnmp, 日记, 技术博客, 博客, python, 技术分享, 笔记">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenTracing的介绍与实践(一)">
+<meta name="twitter:title" content="OpenTracing的介绍与实践(一)">
+<meta property="og:url" content="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+<meta property="twitter:url" content="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+<meta property="og:site_name" content="渺小的尘埃">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2021-04-07T10:09:19">
+  
+  
+    <meta property="article:modified_time" content="2021-04-07T10:09:19">
+  
+  
+  
+    
+      <meta property="article:section" content="后端">
+    
+      <meta property="article:section" content="Go">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="微服务">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://miro.medium.com/fit/c/200/200/1*drzMINEw0ObG5HeBX7OLDw.png">
+  <meta property="twitter:image" content="https://miro.medium.com/fit/c/200/200/1*drzMINEw0ObG5HeBX7OLDw.png">
+
+
+  <meta property="og:image" content="https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg">
+  <meta property="twitter:image" content="https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg">
+
+
+
+
+  <meta property="og:image" content="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg">
+  <meta property="twitter:image" content="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg">
+
+
+    <title>OpenTracing的介绍与实践(一)</title>
+
+    <link rel="icon" href="https://gy0624ww.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://gy0624ww.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-155223492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://gy0624ww.github.io/">渺小的尘埃</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://gy0624ww.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://gy0624ww.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">渺小的尘埃</h4>
+        
+          <h5 class="sidebar-profile-bio">不完全栈工程师</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user-circle-o"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/page/friendlink">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-handshake-o"></i>
+      
+      <span class="sidebar-button-desc">friendLink</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link open-algolia-search" href="https://gy0624ww.github.io/#search">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+      
+      <span class="sidebar-button-desc">Search</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/gy0624ww" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              post-header-cover--partial"
+       style="background-image:url('https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      OpenTracing的介绍与实践(一)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2021-04-07T10:09:19&#43;08:00">
+        
+  April 7, 2021
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://gy0624ww.github.io/categories/%e5%90%8e%e7%ab%af">后端</a>, 
+    
+      <a class="category-link" href="https://gy0624ww.github.io/categories/go">Go</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">人并不是因为美丽才可爱，而是因为可爱才美丽</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#什么是链路追踪">什么是链路追踪？</a></li>
+<li><a href="#什么是opentracing">什么是OpenTracing？</a>
+<ul>
+<li><a href="#语义概念">语义概念</a>
+<ul>
+<li><a href="#span">span</a></li>
+<li><a href="#span-context-span的上下文">Span Context span的上下文</a></li>
+<li><a href="#reference-span之间的关系">Reference span之间的关系</a></li>
+<li><a href="#baggage">Baggage</a></li>
+<li><a href="#inject-extract">Inject/Extract</a></li>
+</ul></li>
+<li><a href="#jaeger架构">Jaeger架构</a></li>
+<li><a href="#context-传播">Context 传播</a></li>
+<li><a href="#jaeger配置项说明">Jaeger配置项说明</a>
+<ul>
+<li><a href="#采样">采样</a>
+<ul>
+<li><a href="#constant-常量策略">Constant: 常量策略</a></li>
+<li><a href="#probabilistic-概率决策">Probabilistic: 概率决策</a></li>
+<li><a href="#rate-limiting-频次策略">Rate Limiting: 频次策略</a></li>
+<li><a href="#remote-远端决策">Remote 远端决策</a></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+</nav>  
+
+<h1 id="什么是链路追踪">什么是链路追踪？</h1>
+
+<p>链路追踪顾名思义就是在一个系统里，从请求开始到请求结束，记录这个请求过程的东西。当然这个记录的粒度按需设定，可以是服务级别，也可以是方法级别，<br />
+这个粒度就是下面将要介绍的OpenTracing里的<code>span</code>概念, 整个trace就是由多个<code>span</code>组成了一个有向无环图（DAG）。</p>
+
+<p>像这样：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://z3.ax1x.com/2021/04/08/cY8P2Q.jpg" title="span DAG" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://z3.ax1x.com/2021/04/08/cY8P2Q.jpg"  alt="span DAG">
+  
+    </a>
+  
+   
+    <span class="caption">span DAG</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h1 id="什么是opentracing">什么是OpenTracing？</h1>
+
+<p>OpenTracing是CNCF（云原生计算基金会）对链路追踪做的一个规范。因为数据采集的过程中往往会对代码进行入侵式埋点，然而不同的链路追踪的系统API各不相同，如果后期希望切换就会带来很大的改动，
+为了解决这种不兼容的问题，OpenTracing孕育而生。大家都依据这个规范去实现，使用者可以不用去关心背后采用的追踪引擎是什么。</p>
+
+<p>简单的说就是OpenTracing提供平台无关，厂商无关的API，是开发者能够方便自如的添加更换追踪系统的实现。</p>
+
+<h2 id="语义概念">语义概念</h2>
+
+<h3 id="span">span</h3>
+
+<p>一个span代表系统中具有开始时间和执行时长的逻辑运行单元，span之间通过嵌套或者顺序建立逻辑关系。</p>
+
+<p>如果把整个trace的有向无环图按时间轴展开，那么span和trace的关系图如下：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://z3.ax1x.com/2021/04/08/cYBt81.jpg" title="span trace relation" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://z3.ax1x.com/2021/04/08/cYBt81.jpg"  alt="span trace relation">
+  
+    </a>
+  
+   
+    <span class="caption">span trace relation</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>从时间轴上可以看到，A覆盖了所有下面子条目的时间，这很容易理解：所有的Span组成一个Trace，而每个Span实际上都消耗了时间，除去重叠部分这些时间的总合就是Trace的时间消耗</p>
+
+<p>Span有父子级别概念：B和C以及D的关系就是父子，而C和D则不是父子关系，<span class="highlight-text primary">父子的时间是重合的</span>，就类似所有子Span和Trace之间的时间关系，B消耗的时间是C和D的时间总合，而A消耗的时间则是B和E的总合</p>
+
+<p>图中：
+1. 在Trace A中，B和E是A的子Span<br />
+2. 在Trace A中，B和E是A的子Span
+3. 在Trace A中，B和E顺序执行，E的执行需要等待B的完成
+4. A的消耗时长为B和E的总合（这里都是理想情况）
+5. 在Span B中，C和D是B的子Span
+6. 在Span B中，C和D顺序执行，D的执行需要等待C的完成
+7. B的消耗时长为C和D的总合（这里都是理想情况）</p>
+
+<p>根据OpenTracing的规范，一个span封装了以下信息：</p>
+
+<ul>
+<li>An operation name 操作名称</li>
+<li>A Start timestamp 起始时间</li>
+<li>A finish timestamp 结束时间</li>
+<li>Span Tag 一组键值对，key必须是<code>string</code>类型，值可以是 <code>string</code>, <code>bool</code>, <code>number</code>类型</li>
+<li>Span Log 一组日志集合，每个log操作包含一个键值对</li>
+<li>A SpanContext span的上下文</li>
+</ul>
+
+<h3 id="span-context-span的上下文">Span Context span的上下文</h3>
+
+<p>spanContext 可以承载数据跨进程进行传输。</p>
+
+<h3 id="reference-span之间的关系">Reference span之间的关系</h3>
+
+<p>一个span可以和一个或者多个span间存在逻辑因果关系。OpenTracing里定义了两种关系：<code>ChildOf</code> 和 <code>FollowFrom</code>。</p>
+
+<p><code>ChildOf</code> :  一个span归属于另一个span，即<code>ChildOf</code>关系。 下面几种情况会构成这种关系：</p>
+
+<ul>
+<li>一个RPC调用的服务端的span和RPC服务客户端的span</li>
+<li>一个sql insert操作的span, 和ORM的save方法的span</li>
+<li>很多span可以并行工作（或者分布式工作）都可能是一个父级的span的子项，他会合并所有子span的执行结果，并在指定期限内返回
+<br /></li>
+</ul>
+
+<p><code>FollowFrom</code> : 用于span独立于父span,比如异步的情况下。</p>
+
+<h3 id="baggage">Baggage</h3>
+
+<p>Baggage Items trace的随行数据，是一个键值对集合，可以在不改动原有header的情况下传递数据</p>
+
+<h3 id="inject-extract">Inject/Extract</h3>
+
+<p>为了在分布式系统里进行跨进程追踪，服务需要能够延续跟踪从客户端发过来的请求。OpenTracing 提供了<code>inject</code>和<code>extract</code>两个方法,先把spanContext序列化后放入一个载体（这个载体可能是<code>http header</code>），发送到下游后再进行反序列化读取上游trace信息。</p>
+
+<p>流程如下图：</p>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://z3.ax1x.com/2021/04/08/cYvV3j.jpg" title="inject &amp; extract" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://z3.ax1x.com/2021/04/08/cYvV3j.jpg"  alt="inject &amp; extract">
+  
+    </a>
+  
+   
+    <span class="caption">inject &amp; extract</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h2 id="jaeger架构">Jaeger架构</h2>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://z3.ax1x.com/2021/04/08/cYxcYF.jpg" title="inject &amp; extract" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://z3.ax1x.com/2021/04/08/cYxcYF.jpg"  alt="inject &amp; extract">
+  
+    </a>
+  
+   
+    <span class="caption">inject &amp; extract</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<p>从上面的图中可以看出这个架构一共分为五个大部分。分别是：</p>
+
+<ul>
+<li>Jaeger Client</li>
+<li>Jaeger Agent</li>
+<li>Jaeger Collector</li>
+<li>Data Store</li>
+<li>Jaeger Query/Jaeger-UI
+<br /></li>
+</ul>
+
+<p>### Jaeger Client</p>
+
+<p>这个client就是基于OpenTracing API协议的多语言实现。这部分就是你的代码里的一个类库文件，是你应用程序的一部分，埋点操作就是在这个部分。<br />
+  应用程序通过API写入数据，把trace信息按照应用程序指定的采样策略传递给jaeger-agent
+  ### Agent</p>
+
+<p>Agent是一个Client并行部署的一个组件，是一个长期启动的守护进程，通过监听UDP接收Client发送过来的Trace信息，并批量发送到Collector.<br />
+  Agent存在的目的就是解耦Client和Collector，为client屏蔽了路由和发现collector的细节。</p>
+
+<p>### Collector</p>
+
+<p>Collector是Jaeger的核心，接收从Agent发送过来的Trace信息，并对其进行验证，索引，转换并且最终存储起来。</p>
+
+<p>### Data Store</p>
+
+<p>Jaeger 的数据存储是可插拔式组件设计，有多种存储可选：<code>Cassandra</code>, <code>Elasticsearch</code>, <code>Kafka（只能当做临时buffer,不能当最终存储）</code>。</p>
+
+<p>但是官方推荐Canssandra,因为新特性更新和稳定性都是最好的。</p>
+
+<p>### Query</p>
+
+<p>接受到查询请求，从后端存储中检索trace并通过UI进行展示。Query是无状态的，可以启动多个实例。</p>
+
+<h2 id="context-传播">Context 传播</h2>
+
+
+ 
+  
+  
+  
+  
+    
+      
+    
+  
+    
+      
+    
+  
+    
+  
+
+ 
+  
+  
+  
+  
+    
+  
+    
+      
+    
+  
+
+<div class="figure center" >
+  
+    <a class="fancybox" href="https://z3.ax1x.com/2021/04/08/cYzY0x.jpg" title="inject &amp; extract" data-fancybox-group="group:none">
+  
+    <img class="fig-img" src="https://z3.ax1x.com/2021/04/08/cYzY0x.jpg"  alt="inject &amp; extract">
+  
+    </a>
+  
+   
+    <span class="caption">inject &amp; extract</span>
+  
+</div>
+
+  <div style="clear:both;"></div>
+
+
+<h2 id="jaeger配置项说明">Jaeger配置项说明</h2>
+
+<h3 id="采样">采样</h3>
+
+<p>链路追踪是一个频繁而且数据量庞大的工作，所以提供了依据不同的业务场景，提供不同的采样策略，来减轻数据压力。</p>
+
+<h4 id="constant-常量策略">Constant: 常量策略</h4>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th><code>sampler.type=const</code></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>值</td>
+<td><code>sampler.param=1</code>:全部采样   <code>sampler.param=0</code>:全部丢弃</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="probabilistic-概率决策">Probabilistic: 概率决策</h4>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th><code>sampler.type=probabilistic</code></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>值</td>
+<td><code>sampler.param=0.1</code>:表示采样1/10</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="rate-limiting-频次策略">Rate Limiting: 频次策略</h4>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th><code>sampler.type=ratelimiting</code></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>值</td>
+<td><code>sampler.param=2.0</code>:表示每秒采样2次</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="remote-远端决策">Remote 远端决策</h4>
+
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th><code>sampler.type=remote</code></th>
+</tr>
+</thead>
+
+<tbody>
+</tbody>
+</table>
+
+<p>这种情况就是Client发送到Agent，Agent来进行采样决策，实际上配置是在Collector上。</p>
+
+<p>介绍就到这，接下来下面更新Opentracing的实际操作。</p>
+
+<div class="alert success no-icon ">
+  <p>(未完)Continue&hellip;</p>
+</div>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+<li><a href="https://opentracing.io/docs/overview">OpenTracing Doc</a></li>
+<li><a href="https://wu-sheng.gitbooks.io/opentracing-io/content/pages/spec.html">OpenTracing 文档中文版</a></li>
+<li><a href="https://xenojoshua.com/2019/04/jaeger-note/#2-opentracing">jaeger-note</a></li>
+<li><a href="https://github.com/yurishkuro/opentracing-tutorial/tree/master/go">opentracing-tutorial</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/" data-tooltip="Final Cut Pro 剪辑入门">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2021 <a href="https://beian.miit.gov.cn/#/Integrated/index">辽ICP备15011453号-2</a>. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2020/01/final-cut-pro-%E5%89%AA%E8%BE%91%E5%85%A5%E9%97%A8/" data-tooltip="Final Cut Pro 剪辑入门">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25B8%2580%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25B8%2580%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25B8%2580%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://s2.ax1x.com/2020/01/02/ltyqeS.jpg" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">渺小的尘埃</h4>
+    
+      <div id="about-card-bio">不完全栈工程师</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        soft enginer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Beijing-China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://gy0624ww.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://gy0624ww.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/go.min.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/gy0624ww.github.io\/2021\/04\/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80\/';
+          
+            this.page.identifier = 'OpenTracing的介绍与实践';
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tellutop';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

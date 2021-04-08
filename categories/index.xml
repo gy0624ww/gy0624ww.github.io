@@ -6,24 +6,15 @@
     <description>Recent content in Categories on 渺小的尘埃</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 28 Jan 2020 10:50:19 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Apr 2021 10:09:19 +0800</lastBuildDate>
     
 	<atom:link href="https://gy0624ww.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>剪辑</title>
-      <link>https://gy0624ww.github.io/categories/%E5%89%AA%E8%BE%91/</link>
-      <pubDate>Tue, 28 Jan 2020 10:50:19 +0800</pubDate>
-      
-      <guid>https://gy0624ww.github.io/categories/%E5%89%AA%E8%BE%91/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Go</title>
       <link>https://gy0624ww.github.io/categories/go/</link>
-      <pubDate>Thu, 02 Jan 2020 14:22:19 +0800</pubDate>
+      <pubDate>Wed, 07 Apr 2021 10:09:19 +0800</pubDate>
       
       <guid>https://gy0624ww.github.io/categories/go/</guid>
       <description></description>
@@ -32,9 +23,18 @@
     <item>
       <title>后端</title>
       <link>https://gy0624ww.github.io/categories/%E5%90%8E%E7%AB%AF/</link>
-      <pubDate>Thu, 02 Jan 2020 14:22:19 +0800</pubDate>
+      <pubDate>Wed, 07 Apr 2021 10:09:19 +0800</pubDate>
       
       <guid>https://gy0624ww.github.io/categories/%E5%90%8E%E7%AB%AF/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>剪辑</title>
+      <link>https://gy0624ww.github.io/categories/%E5%89%AA%E8%BE%91/</link>
+      <pubDate>Tue, 28 Jan 2020 10:50:19 +0800</pubDate>
+      
+      <guid>https://gy0624ww.github.io/categories/%E5%89%AA%E8%BE%91/</guid>
       <description></description>
     </item>
     

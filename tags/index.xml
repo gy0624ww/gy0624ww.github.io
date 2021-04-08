@@ -6,10 +6,28 @@
     <description>Recent content in Tags on 渺小的尘埃</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Tue, 28 Jan 2020 10:50:19 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 07 Apr 2021 10:09:19 +0800</lastBuildDate>
     
 	<atom:link href="https://gy0624ww.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>golang</title>
+      <link>https://gy0624ww.github.io/tags/golang/</link>
+      <pubDate>Wed, 07 Apr 2021 10:09:19 +0800</pubDate>
+      
+      <guid>https://gy0624ww.github.io/tags/golang/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>微服务</title>
+      <link>https://gy0624ww.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</link>
+      <pubDate>Wed, 07 Apr 2021 10:09:19 +0800</pubDate>
+      
+      <guid>https://gy0624ww.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Final Cut Pro</title>
