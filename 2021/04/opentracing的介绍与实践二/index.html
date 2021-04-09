@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+  <head>
+    
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="generator" content="Hugo 0.59.1 with theme Tranquilpeak 0.4.8-BETA">
+<meta name="author" content="渺小的尘埃">
+<meta name="keywords" content="opentracing, 链路追踪, 微服务, OpenTracing的介绍与实践, OpenTracing的最佳实践, development, Go, golang, php, lnmp, 日记, 技术博客, 博客, python, 技术分享, 笔记">
+<meta name="description" content="">
+
+
+<meta property="og:description" content="">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenTracing的介绍与实践(二)">
+<meta name="twitter:title" content="OpenTracing的介绍与实践(二)">
+<meta property="og:url" content="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+<meta property="twitter:url" content="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+<meta property="og:site_name" content="渺小的尘埃">
+<meta property="og:description" content="">
+<meta name="twitter:description" content="">
+<meta property="og:locale" content="en-us">
+
+  
+    <meta property="article:published_time" content="2021-04-09T14:09:09">
+  
+  
+    <meta property="article:modified_time" content="2021-04-09T14:09:09">
+  
+  
+  
+    
+      <meta property="article:section" content="后端">
+    
+      <meta property="article:section" content="Go">
+    
+  
+  
+    
+      <meta property="article:tag" content="golang">
+    
+      <meta property="article:tag" content="微服务">
+    
+  
+
+
+<meta name="twitter:card" content="summary">
+
+
+
+
+
+
+
+  <meta property="og:image" content="https://miro.medium.com/fit/c/200/200/1*drzMINEw0ObG5HeBX7OLDw.png">
+  <meta property="twitter:image" content="https://miro.medium.com/fit/c/200/200/1*drzMINEw0ObG5HeBX7OLDw.png">
+
+
+  <meta property="og:image" content="https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg">
+  <meta property="twitter:image" content="https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg">
+
+
+
+
+  <meta property="og:image" content="https://www.gravatar.com/avatar/34c99a0c48dc04e41019214b8f4e7c58?s=640">
+  <meta property="twitter:image" content="https://www.gravatar.com/avatar/34c99a0c48dc04e41019214b8f4e7c58?s=640">
+
+
+    <title>OpenTracing的介绍与实践(二)</title>
+
+    <link rel="icon" href="https://gy0624ww.github.io/favicon.png">
+    
+
+    
+
+    <link rel="canonical" href="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/jquery.fancybox.min.css" integrity="sha256-vuXZ9LGmmwtjqFX1F+EKin1ThZMub58gKULUyf0qECk=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.4/helpers/jquery.fancybox-thumbs.min.css" integrity="sha256-SEa4XYAHihTcEP1f5gARTB2K26Uk8PsndQYHQC1f4jU=" crossorigin="anonymous" />
+    
+    
+    <link rel="stylesheet" href="https://gy0624ww.github.io/css/style-twzjdbqhmnnacqs0pwwdzcdbt8yhv8giawvjqjmyfoqnvazl0dalmnhdkvp7.min.css" />
+    
+    
+
+    
+      
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-155223492-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+    
+    
+  </head>
+
+  <body>
+    <div id="blog">
+      <header id="header" data-behavior="5">
+  <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+  <div class="header-title">
+    <a class="header-title-link" href="https://gy0624ww.github.io/">渺小的尘埃</a>
+  </div>
+  
+    
+      <a class="header-right-picture "
+         href="https://gy0624ww.github.io/#about">
+    
+    
+    
+      
+        <img class="header-picture" src="https://www.gravatar.com/avatar/34c99a0c48dc04e41019214b8f4e7c58?s=90" alt="Author&#39;s picture" />
+      
+    
+    </a>
+  
+</header>
+
+      <nav id="sidebar" data-behavior="5">
+  <div class="sidebar-container">
+    
+      <div class="sidebar-profile">
+        <a href="https://gy0624ww.github.io/#about">
+          <img class="sidebar-profile-picture" src="https://www.gravatar.com/avatar/34c99a0c48dc04e41019214b8f4e7c58?s=110" alt="Author&#39;s picture" />
+        </a>
+        <h4 class="sidebar-profile-name">渺小的尘埃</h4>
+        
+          <h5 class="sidebar-profile-bio">不完全栈工程师</h5>
+        
+      </div>
+    
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-home"></i>
+      
+      <span class="sidebar-button-desc">Home</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/categories">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-bookmark"></i>
+      
+      <span class="sidebar-button-desc">Categories</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/tags">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-tags"></i>
+      
+      <span class="sidebar-button-desc">Tags</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/archives">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-archive"></i>
+      
+      <span class="sidebar-button-desc">Archives</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/#about">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-user-circle-o"></i>
+      
+      <span class="sidebar-button-desc">About</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/page/friendlink">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-handshake-o"></i>
+      
+      <span class="sidebar-button-desc">friendLink</span>
+    </a>
+  </li>
+
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link open-algolia-search" href="https://gy0624ww.github.io/#search">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-search"></i>
+      
+      <span class="sidebar-button-desc">Search</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://github.com/gy0624ww" target="_blank" rel="noopener">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-github"></i>
+      
+      <span class="sidebar-button-desc">GitHub</span>
+    </a>
+  </li>
+
+
+    </ul>
+    <ul class="sidebar-buttons">
+      
+  <li class="sidebar-button">
+    
+      <a class="sidebar-button-link " href="https://gy0624ww.github.io/index.xml">
+    
+      <i class="sidebar-button-icon fa fa-lg fa-rss"></i>
+      
+      <span class="sidebar-button-desc">RSS</span>
+    </a>
+  </li>
+
+
+    </ul>
+  </div>
+</nav>
+
+      
+  <div class="post-header-cover
+              text-center
+              post-header-cover--partial"
+       style="background-image:url('https://s1.ax1x.com/2020/06/29/NWulT0.md.jpg')"
+       data-behavior="5">
+    
+      <div class="post-header main-content-wrap text-center">
+  
+    <h1 class="post-title" itemprop="headline">
+      OpenTracing的介绍与实践(二)
+    </h1>
+  
+  
+  <div class="postShorten-meta post-meta">
+    
+      <time itemprop="datePublished" datetime="2021-04-09T14:09:09&#43;08:00">
+        
+  April 9, 2021
+
+      </time>
+    
+    
+  
+  
+    <span>in</span>
+    
+      <a class="category-link" href="https://gy0624ww.github.io/categories/%e5%90%8e%e7%ab%af">后端</a>, 
+    
+      <a class="category-link" href="https://gy0624ww.github.io/categories/go">Go</a>
+    
+  
+
+  </div>
+
+</div>
+    
+  </div>
+
+
+      <div id="main" data-behavior="5"
+        class="hasCover
+               hasCoverMetaIn
+               hasCoverCaption">
+        <article class="post" itemscope itemType="http://schema.org/BlogPosting">
+          
+            <span class="post-header-cover-caption caption">有些人，再见一面才能忘记</span>
+          
+          
+          <div class="post-content markdown" itemprop="articleBody">
+            <div class="main-content-wrap">
+              <h1 id="table-of-contents">Table of Contents</h1><nav id="TableOfContents">
+<ul>
+<li><a href="#本课程目标">本课程目标</a></li>
+<li><a href="#演示">演示</a>
+<ul>
+<li><a href="#a-simple-hello-world-program">A simple Hello-World program</a></li>
+<li><a href="#创建一个trace">创建一个trace</a></li>
+<li><a href="#初始化一个真正的tracer">初始化一个真正的tracer</a></li>
+<li><a href="#丰富trace相关信息-tags-logs">丰富trace相关信息，Tags &amp; Logs</a>
+<ul>
+<li><a href="#using-tags">Using Tags</a></li>
+<li><a href="#using-logs">Using Logs</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#参考文献">参考文献</a></li>
+</ul>
+</nav>  
+
+<div class="alert warning ">
+  <p>本文主体内容译自官方教学并可能稍加修改，原版 <a href="https://github.com/yurishkuro/opentracing-tutorial/tree/master/go">传送门</a></p>
+</div>
+
+<h1 id="本课程目标">本课程目标</h1>
+
+<p>你将学会：</p>
+
+<ul>
+<li>初始化一个Tracer</li>
+<li>创建一个简单的trace</li>
+<li>丰富trace相关信息</li>
+</ul>
+
+<h1 id="演示">演示</h1>
+
+<h2 id="a-simple-hello-world-program">A simple Hello-World program</h2>
+
+<p>我们首先来创建一个简单的应用：<code>lesson01/hello.go</code>, 大概逻辑是接收一个参数并且用程序打印出来：</p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br><span>7</span><br><span>8</span><br><span>9</span><br><span>10</span><br><span>11</span><br><span>12</span><br><span>13</span><br><span>14</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">package main
+import (
+    &#34;fmt&#34;
+    &#34;os&#34;
+)
+
+func main() {
+    if len(os.Args) != 2 {
+        panic(&#34;ERROR: Expecting one argument&#34;)
+    }
+    helloTo := os.Args[1]
+    helloStr := fmt.Sprintf(&#34;Hello, %s!&#34;, helloTo)
+    println(helloStr)
+}</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<p>运行结果：</p>
+
+<pre><code>$ go run ./lesson01/hello.go Bryan
+Hello, Bryan!  
+</code></pre>
+
+<h2 id="创建一个trace">创建一个trace</h2>
+
+<p>上文已经说过，trace 是由span组成的有向无环图，<code>span</code>是链路记录逻辑的标记。每个span至少含有如下属性：</p>
+
+<ul>
+<li>一个操作的名字（operation name）</li>
+<li>一个开始时间(start time)</li>
+<li>一个结束时间(finish name)<br /></li>
+</ul>
+
+<p>下面我们来创建只含有一个span的trace。首先我们需要一个<code>opentracing.Tracer</code>的实例。我们可以用<code>opentracing.GlobalTracer()</code>返回的全局实例先来代替</p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br><span>7</span><br><span>8</span><br><span>9</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">...
+...
+helloStr := fmt.Sprintf(&#34;Hello, %s!&#34;, helloTo)
+
+tracer := opentracing.GlobalTracer()
+
+span := tracer.StartSpan(&#34;say-hello&#34;)
+println(helloStr)
+span.Finish()</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<p>上面代码我们展示了 OpenTracing API的一些基本功能和特性：</p>
+
+<ul>
+<li>一个<code>tracer</code>实例是用来创建一个新的span,通过 <code>StartSpan</code> 方法</li>
+<li>每个<code>span</code> 要输入一个操作名，上面代码中输入的是<code>say-hello</code></li>
+<li>每个<code>span</code> 记录完信息后必须调用他的<code>Finish()</code>方法</li>
+<li>tracer会自动的记录开始和结束时间戳</li>
+</ul>
+
+<h2 id="初始化一个真正的tracer">初始化一个真正的tracer</h2>
+
+<p>我们基于jaeger来初始化一个tracer的实例，参考<a href="http://github.com/uber/jaeger-client-go">(http://github.com/uber/jaeger-client-go)</a></p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br><span>7</span><br><span>8</span><br><span>9</span><br><span>10</span><br><span>11</span><br><span>12</span><br><span>13</span><br><span>14</span><br><span>15</span><br><span>16</span><br><span>17</span><br><span>18</span><br><span>19</span><br><span>20</span><br><span>21</span><br><span>22</span><br><span>23</span><br><span>24</span><br><span>25</span><br><span>26</span><br><span>27</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">import (
+	&#34;fmt&#34;
+	&#34;io&#34;
+
+	opentracing &#34;github.com/opentracing/opentracing-go&#34;
+	jaeger &#34;github.com/uber/jaeger-client-go&#34;
+	config &#34;github.com/uber/jaeger-client-go/config&#34;
+)
+
+// initJaeger returns an instance of Jaeger Tracer that samples 100% of traces and logs all spans to stdout.
+func initJaeger(service string) (opentracing.Tracer, io.Closer) {
+    cfg := &amp;config.Configuration{
+        ServiceName: service,
+        Sampler: &amp;config.SamplerConfig{
+            Type:  &#34;const&#34;,
+            Param: 1,
+        },
+        Reporter: &amp;config.ReporterConfig{
+            LogSpans: true,
+        },
+    }
+    tracer, closer, err := cfg.NewTracer(config.Logger(jaeger.StdLogger))
+    if err != nil {
+        panic(fmt.Sprintf(&#34;ERROR: cannot init Jaeger: %v\n&#34;, err))
+    }
+    return tracer, closer
+}</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<p>我们在main函数里采用这个来初始化tracer:</p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">...
+...
+tracer, closer := initJaeger(&#34;hello-world&#34;)
+defer closer.Close()
+...
+...</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<p>我们可以看到我们传递了一个参数<code>hello-world</code>到初始化方法里，用来标记是在一个叫<code>hello-service</code>的服务下的tracer创建的span。</p>
+
+<p>现在试下执行下程序，我们会看到下面的日志：</p>
+
+<pre><code>$ go run ./lesson01/hello.go Bryan
+2017/09/22 20:26:49 Initializing logging reporter
+Hello, Bryan!
+2017/09/22 20:26:49 Reporting span 5642914c078ef2f0:5642914c078ef2f0:0:1
+</code></pre>
+
+<p>如果你已经运行的jaeger,你就可以在UI里查询到这个trace。</p>
+
+<h2 id="丰富trace相关信息-tags-logs">丰富trace相关信息，Tags &amp; Logs</h2>
+
+<p>现在我们创建的trace还是很基础的。如果我们的程序执行用<code>hello.go Susan</code> 替代 <code>hello.go Bryan</code>， 那么两个trace结果会相当难以区分。<br />
+如果我们在trace能够捕获到参数来区分他们就会非常nice。</p>
+
+<p>一种简单的方法就是实用字符串<code>Hello,Bryan!</code> 替代<code>say-hello</code>作为span的操作名。然而这种做法在分布式链路追踪是非常不推荐的，因为操作名是代表一组span,而不是独立的一个实例。<br />
+举个栗子，在<code>Jaeger UI</code>里你可以下拉选择里选择操作名来查找筛选traces,那将会是非常糟糕的用户体验，如果我们运行了1000次程序，对1000个人说hello,那么下拉框就得有1000个条目，</p>
+
+<p>另一个选择更统称一些名字作为操作名的原因是这样更方便聚合。再举个栗子，<code>Jaeger tracer</code>有一个选项是对应用流量生成指标，如果用不同的相互独立的操作名那么这统计将毫无用处。</p>
+
+<p>推荐的解决方案是为用tags,logs为span打上批注来丰富span的内容</p>
+
+<p><code>tag</code> 是一个k/v键值对，提供了和span有关的一些元数据<br />
+<code>log</code> 是类似于普通的日志语句，包含了一个时间戳和一些数据，只不过是依附于span里的</p>
+
+<p>那我们该什么时候用tags和logs呢？<br />
+tags用于描述应用于整个span的属性。例如如果一个span记录的是一个HTTP请求，那么请求的URL就应该被标记成tag,
+因为没有道理认为URL只在span的不同时间点才相关。另一方面，如果服务器响应返回一个重定向URL，那么应该用log记录他比较合理，因为有一个明确的时间点去记录这个响应事件。<br />
+OpenTracing提供了相关的<a href="https://github.com/opentracing/specification/blob/master/semantic_conventions.md">指南</a>来提供推荐的tags和logs参数。</p>
+
+<div class="alert info ">
+  <p><em>笔者注：span tag属性适用于能代表整个span生命周期的属性，整段期间内都适用，而不是仅仅其中某个时间点才适用。比如记录span时用的一些常量配置等信息。<br />
+而Log是记录的span周期内的某一个时间点发生的事件</em></p>
+</div>
+
+<h3 id="using-tags">Using Tags</h3>
+
+<p>在<code>hello.go Bryan</code>的例子中，其中<code>Bryan</code>是一个很好的span tag选项，因为他适用于整个span周期，并且不仅是存在某一时间点，我们可以这样记录他：</p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">...
+...
+span := tracer.StartSpan(&#34;say-hello&#34;)
+span.SetTag(&#34;hello-to&#34;, helloTo)
+...
+...</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<h3 id="using-logs">Using Logs</h3>
+
+<p>由于我们现在的程序还太过于简单，以至于不好找明显的记录Log的例子，但是我们还是来试一试。我们现在马上格式化输出<code>helloStr</code>并且打印输出，这两项操作都有特定的时间点，所以我们可以在他们执行完来记录完成情况。</p>
+
+
+
+  
+  
+  
+  
+  
+
+
+  
+    
+  
+  
+    
+  
+
+<figure class="codeblock codeblock--tabbed">
+  <figcaption>
+    
+      <span><a href="https://github.com/yurishkuro/opentracing-tutorial/blob/master/go/lesson01/solution/hello.go">lesson01</a></span>
+    
+    <ul class="tabs">
+      
+        <li class="tab active">go</li>
+      
+    </ul>
+  </figcaption> 
+  <div class="tabs-content">
+    
+      
+      <figure class="highlight language-go" style="display: block;">   
+        <table>
+          <tbody>
+            <tr>
+              <td class="gutter">
+                <pre><span>1</span><br><span>2</span><br><span>3</span><br><span>4</span><br><span>5</span><br><span>6</span><br><span>7</span><br><span>8</span><br><span>9</span><br><span>10</span><br></pre>
+              </td>
+              <td class="code">
+                <pre class="code-highlight language-go"><code class="go">...
+...
+helloStr := fmt.Sprintf(&#34;Hello, %s!&#34;, helloTo)
+span.LogFields(
+    log.String(&#34;event&#34;, &#34;string-format&#34;),
+    log.String(&#34;value&#34;, helloStr),
+)
+
+println(helloStr)
+span.LogKV(&#34;event&#34;, &#34;println&#34;)</code></pre>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </figure>
+    
+  </div>
+</figure>
+
+<p>如果你对结构化日志API不熟悉，那么这个log语法可能看起来有些奇怪，与将日志消息格式化成便于阅读的字符串不同，结构化日志API更鼓励你把日志信息拆分成若干个k/v键值对来记录，<br />
+这样方便日志聚合系统收集加工。这种做法主要是考虑到如今的日志是主要是程序来读的而不是人类。更多结构化日志信息请Google <code>structured-logging</code></p>
+
+<p>OpenTracing API 为Go提供了两种风格的记录log的方式：</p>
+
+<ul>
+<li><code>LogFields</code> 方法，提供了强类型声明 k/v键值对</li>
+<li><code>LogKV</code> 方法，提供了可变参数列表交替式键值对<code>key1,value1,key2,value2</code>（使用更简单）<br /></li>
+</ul>
+
+<p>OpenTracing规范还建议所有日志语句包含一个<code>event</code>字段，用来记录整个事件，并提供该事件的其他属性值作为附加字段。</p>
+
+<div class="alert success no-icon ">
+  <p>(未完)Continue&hellip;</p>
+</div>
+
+<h1 id="参考文献">参考文献</h1>
+
+<ul>
+<li><a href="https://github.com/yurishkuro/opentracing-tutorial/tree/master/go">opentracing-tutorial</a></li>
+</ul>
+              
+            </div>
+          </div>
+          <div id="post-footer" class="post-footer main-content-wrap">
+            
+              
+                
+                
+                  <div class="post-footer-tags">
+                    <span class="text-color-light text-small">TAGGED IN</span><br/>
+                    
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/golang/">golang</a>
+
+  <a class="tag tag--primary tag--small" href="https://gy0624ww.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务</a>
+
+                  </div>
+                
+              
+            
+            <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/" data-tooltip="OpenTracing的介绍与实践(一)">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+            
+              
+                <div id="disqus_thread">
+  <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+              
+            
+          </div>
+        </article>
+        <footer id="footer" class="main-content-wrap">
+  <span class="copyrights">
+    &copy; 2021 <a href="https://beian.miit.gov.cn/#/Integrated/index">辽ICP备15011453号-2</a>. All Rights Reserved
+  </span>
+</footer>
+
+      </div>
+      <div id="bottom-bar" class="post-bottom-bar" data-behavior="5">
+        <div class="post-actions-wrap">
+  
+      <nav >
+        <ul class="post-actions post-action-nav">
+          
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--default tooltip--top" href="https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/" data-tooltip="OpenTracing的介绍与实践(一)">
+              
+                  <i class="fa fa-angle-left"></i>
+                  <span class="hide-xs hide-sm text-small icon-ml">PREVIOUS</span>
+                </a>
+            </li>
+            <li class="post-action">
+              
+                <a class="post-action-btn btn btn--disabled">
+              
+                  <span class="hide-xs hide-sm text-small icon-mr">NEXT</span>
+                  <i class="fa fa-angle-right"></i>
+                </a>
+            </li>
+          
+        </ul>
+      </nav>
+    <ul class="post-actions post-action-share" >
+      
+        <li class="post-action hide-lg hide-md hide-sm">
+          <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions">
+            <i class="fa fa-share-alt"></i>
+          </a>
+        </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-facebook-official"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-twitter"></i>
+            </a>
+          </li>
+        
+          <li class="post-action hide-xs">
+            <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/">
+              <i class="fa fa-google-plus"></i>
+            </a>
+          </li>
+        
+      
+      
+        <li class="post-action">
+          <a class="post-action-btn btn btn--default" href="#disqus_thread">
+            <i class="fa fa-comment-o"></i>
+          </a>
+        </li>
+      
+      <li class="post-action">
+        
+          <a class="post-action-btn btn btn--default" href="#table-of-contents">
+        
+          <i class="fa fa-list"></i>
+        </a>
+      </li>
+    </ul>
+  
+</div>
+
+      </div>
+      <div id="share-options-bar" class="share-options-bar" data-behavior="5">
+  <i id="btn-close-shareoptions" class="fa fa-close"></i>
+  <ul class="share-options">
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25BA%258C%2F">
+          <i class="fa fa-facebook-official"></i><span>Share on Facebook</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25BA%258C%2F">
+          <i class="fa fa-twitter"></i><span>Share on Twitter</span>
+        </a>
+      </li>
+    
+      <li class="share-option">
+        <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https%3A%2F%2Fgy0624ww.github.io%2F2021%2F04%2Fopentracing%25E7%259A%2584%25E4%25BB%258B%25E7%25BB%258D%25E4%25B8%258E%25E5%25AE%259E%25E8%25B7%25B5%25E4%25BA%258C%2F">
+          <i class="fa fa-google-plus"></i><span>Share on Google&#43;</span>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+<div id="share-options-mask" class="share-options-mask"></div>
+    </div>
+    
+    <div id="about">
+  <div id="about-card">
+    <div id="about-btn-close">
+      <i class="fa fa-remove"></i>
+    </div>
+    
+      <img id="about-card-picture" src="https://www.gravatar.com/avatar/34c99a0c48dc04e41019214b8f4e7c58?s=110" alt="Author&#39;s picture" />
+    
+    <h4 id="about-card-name">渺小的尘埃</h4>
+    
+      <div id="about-card-bio">不完全栈工程师</div>
+    
+    
+      <div id="about-card-job">
+        <i class="fa fa-briefcase"></i>
+        <br/>
+        soft enginer
+      </div>
+    
+    
+      <div id="about-card-location">
+        <i class="fa fa-map-marker"></i>
+        <br/>
+        Beijing-China
+      </div>
+    
+  </div>
+</div>
+
+    
+
+    
+  
+    
+      <div id="cover" style="background-image:url('https://gy0624ww.github.io/images/cover.jpg');"></div>
+    
+  
+
+
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.7/js/jquery.fancybox.min.js" integrity="sha256-GEAnjcTqVP+vBp3SSc8bEDQqvWAZMiHyUSIorrWwH50=" crossorigin="anonymous"></script>
+
+
+<script src="https://gy0624ww.github.io/js/script-pcw6v3xilnxydl1vddzazdverrnn9ctynvnxgwho987mfyqkuylcb1nlt.min.js"></script>
+
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.10/languages/go.min.js"></script>
+  
+
+<script lang="javascript">
+window.onload = updateMinWidth;
+window.onresize = updateMinWidth;
+document.getElementById("sidebar").addEventListener("transitionend", updateMinWidth);
+function updateMinWidth() {
+  var sidebar = document.getElementById("sidebar");
+  var main = document.getElementById("main");
+  main.style.minWidth = "";
+  var w1 = getComputedStyle(main).getPropertyValue("min-width");
+  var w2 = getComputedStyle(sidebar).getPropertyValue("width");
+  var w3 = getComputedStyle(sidebar).getPropertyValue("left");
+  main.style.minWidth = `calc(${w1} - ${w2} - ${w3})`;
+}
+</script>
+
+<script>
+$(document).ready(function() {
+  hljs.configure({ classPrefix: '', useBR: false });
+  $('pre.code-highlight > code, pre > code').each(function(i, block) {
+    if (!$(this).hasClass('codeblock')) {
+      $(this).addClass('codeblock');
+    }
+    hljs.highlightBlock(block);
+  });
+});
+</script>
+
+
+  
+    
+      <script>
+        var disqus_config = function () {
+          this.page.url = 'https:\/\/gy0624ww.github.io\/2021\/04\/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C\/';
+          
+            this.page.identifier = 'OpenTracing的介绍与实践(二)';
+          
+        };
+        (function() {
+          
+          
+          if (window.location.hostname == "localhost") {
+            return;
+          }
+          var d = document, s = d.createElement('script');
+          var disqus_shortname = 'tellutop';
+          s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+          s.setAttribute('data-timestamp', +new Date());
+          (d.head || d.body).appendChild(s);
+        })();
+      </script>
+    
+  
+
+
+
+
+    
+  </body>
+</html>
+

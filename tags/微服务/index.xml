@@ -6,10 +6,19 @@
     <description>Recent content in 微服务 on 渺小的尘埃</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Wed, 07 Apr 2021 10:09:19 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 09 Apr 2021 14:09:09 +0800</lastBuildDate>
     
 	<atom:link href="https://gy0624ww.github.io/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>OpenTracing的介绍与实践(二)</title>
+      <link>https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/</link>
+      <pubDate>Fri, 09 Apr 2021 14:09:09 +0800</pubDate>
+      
+      <guid>https://gy0624ww.github.io/2021/04/opentracing%E7%9A%84%E4%BB%8B%E7%BB%8D%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%BA%8C/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>OpenTracing的介绍与实践(一)</title>
